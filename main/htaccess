@@ -1,0 +1,168 @@
+#AuthType Basic
+#AuthName "Beta access"
+#AuthUserFile /home/doctor911/beta.doctor911.ru/.htpasswd
+#require valid-user
+
+Options -Indexes 
+ErrorDocument 404 /404.php
+
+<IfModule mod_php5.c>
+  php_flag allow_call_time_pass_reference 1
+  php_flag session.use_trans_sid off
+
+  #php_value display_errors 1
+
+  #php_value mbstring.func_overload 2
+  #php_value mbstring.internal_encoding UTF-8
+</IfModule>
+
+<IfModule mod_rewrite.c>
+  Options +FollowSymLinks
+  RewriteEngine On
+
+	RewriteCond %{REQUEST_URI} ^/articles/uhod-za-lezhachimi-bolnymi-na-domu/$
+	RewriteRule ^.*$ http://sidelki.doctor911.ru [R=301,L]
+
+	RewriteCond %{REQUEST_URI} ^/articles/transportirovka-lezhachih-bolnyh/$
+	RewriteRule ^.*$ http://www.doctor911.ru/services/medical-evacuation/ [R=301,L]
+
+	RewriteCond %{REQUEST_URI} ^/articles/nashi-vrachi-priedut-k-vam-domoj/$
+	RewriteRule ^.*$ http://call.doctor911.ru/ [R=301,L]
+  
+  
+  RewriteCond %{HTTP_HOST} ^doctor911.ru
+  RewriteRule (.*) http://www.doctor911.ru/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^doctor911.spb.ru
+  RewriteRule (.*) http://www.doctor911.ru/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^www.doctor911.spb.ru
+  RewriteRule (.*) http://www.doctor911.ru/$1 [R=301,L]
+
+  RewriteCond %{REQUEST_URI} ^/novosti/
+  RewriteRule ^.*$ http://www.doctor911.ru/news/ [R=301,L]	 
+  
+  RewriteRule ^vyzov-vracha-na-dom/medicinskaya-karta-dlya-detskogo-sada-026-u/?$    http://call.doctor911.ru/services/children/medicinskaya-karta-dlya-detskogo-sada-026-u/ [L,R=301]
+  RewriteRule ^vyzov-vracha-na-dom/stoimost-uslug/?$                                 http://call.doctor911.ru/services/pricelist/ [L,R=301]
+  RewriteRule ^vyzov-vracha-na-dom/detskie-abonementy/?$                             http://call.doctor911.ru/services/children/abonement/ [L,R=301]
+  RewriteRule ^vyzov-vracha-na-dom/abonementnye-programmy-dlya-vzroslyh/?$           http://call.doctor911.ru/services/adults/abonement/ [L,R=301]
+
+  RewriteRule ^vyzov-vracha-na-dom/lor-vrach/?$                                      http://call.doctor911.ru/services/adults/lor/ [L,R=301]
+  RewriteRule ^vyzov-vracha-na-dom/pediatr/?$                                        http://call.doctor911.ru/services/children/pediatr/ [L,R=301]
+  RewriteRule ^vyzov-vracha-na-dom/([^/]+)/?$                                        http://call.doctor911.ru/services/adults/$1/ [L,R=301]
+  RewriteRule ^vyzov-vracha-na-dom                                                   http://call.doctor911.ru [L,R=301]
+
+  RewriteRule ^uhod-za-bolnymi/medicinskaya-sidelka/?                                http://sidelki.doctor911.ru/services/hospital/           [L,R=301]
+  RewriteRule ^uhod-za-bolnymi/sidelka/?                                             http://sidelki.doctor911.ru/services/seriously-home/     [L,R=301]
+  RewriteRule ^uhod-za-bolnymi/sidelka-s-prozhivaniem/?                              http://sidelki.doctor911.ru/services/with-accommodation/ [L,R=301]
+  RewriteRule ^uhod-za-bolnymi                                                       http://sidelki.doctor911.ru [L,R=301]
+
+  RewriteRule ^chastnaya-skoraya-pomow/detskaya-skoraya-pomow/bol-v-uhe              /services/first-aid-for-children/ [L,R=301]
+  RewriteRule ^chastnaya-skoraya-pomow/detskaya-skoraya-pomow/bol-v-zhivote          /services/first-aid-for-children/ [L,R=301]
+  RewriteRule ^chastnaya-skoraya-pomow/detskaya-skoraya-pomow/vysokaya-temperatura   /services/first-aid-for-children/ [L,R=301]
+  RewriteRule ^chastnaya-skoraya-pomow/detskaya-skoraya-pomow                        /services/first-aid-for-children/ [L,R=301]
+
+  RewriteRule ^chastnaya-skoraya-pomow/dezhurstvo-skoroj-pomowi-na-massovyh-meropriyatiyah      /services/public-events/ [L,R=301]
+  
+  RewriteRule ^chastnaya-skoraya-pomow/stoimost-uslug                                 /services/         [L,R=301]
+  RewriteRule ^chastnaya-skoraya-pomow/vzroslaya-skoraya-pomow                        /services/first-aid-for-adults/ [L,R=301]
+
+  RewriteRule ^kontakty                                                               /contact/ [L,R=301]
+  RewriteRule ^o-kompanii/vacancies                                                   /about/vacancies/  [L,R=301]
+  RewriteRule ^o-kompanii/nashi_licenzii                                              /about/licenses/   [L,R=301]
+  RewriteRule ^o-kompanii                                                             /about/   [L,R=301]
+  RewriteRule ^stoimost-uslug                                                         /services/ [L,R=301]
+  RewriteRule ^transportirovka-bolnyh                                                 /services/medical-evacuation/ [L,R=301]
+  RewriteRule ^chastnaya-skoraya-pomow                                                / [L,R=301]
+  RewriteRule ^index.html                                               / [L,R=301]
+  RewriteRule ^deti.html                                               / [L,R=301]
+
+  
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-l
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !/bitrix/urlrewrite.php$
+  RewriteRule ^(.*)$ /bitrix/urlrewrite.php [L]
+  RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+</IfModule>
+
+<IfModule mod_dir.c>
+  DirectoryIndex index.php index.html
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive on
+  ExpiresByType image/jpeg "access plus 3 day"
+  ExpiresByType image/gif "access plus 3 day"
+</IfModule>
+
+### Сжать ответ сервера для перечисленных MIME типов
+<ifModule mod_deflate.c>
+  <IfModule mod_filter.c>
+      AddOutputFilterByType DEFLATE text/plain text/html
+      AddOutputFilterByType DEFLATE text/css
+      AddOutputFilterByType DEFLATE text/javascript application/javascript application/x-javascript
+      AddOutputFilterByType DEFLATE text/xml application/xml application/xhtml+xml application/rss+xml
+      AddOutputFilterByType DEFLATE application/json
+      AddOutputFilterByType DEFLATE application/vnd.ms-fontobject application/x-font-ttf font/opentype image/svg+xml image/x-icon
+  </ifModule>
+</ifModule>
+
+
+<IfModule mod_headers.c>
+    Header unset ETag
+</IfModule>
+ 
+<IfModule mod_expires.c>
+
+    ExpiresActive on
+    ExpiresDefault                                      "access plus 1 week"
+
+  # CSS
+    ExpiresByType text/css                              "access plus 1 week"
+
+  # Data interchange
+    ExpiresByType application/json                      "access plus 0 seconds"
+    ExpiresByType application/ld+json                   "access plus 0 seconds"
+    ExpiresByType application/vnd.geo+json              "access plus 0 seconds"
+    ExpiresByType application/xml                       "access plus 0 seconds"
+    ExpiresByType text/xml                              "access plus 0 seconds"
+
+  # Favicon (cannot be renamed!) and cursor images
+    ExpiresByType image/x-icon                          "access plus 1 week"
+
+  # HTML components (HTCs)
+    ExpiresByType text/x-component                      "access plus 1 week"
+
+  # HTML
+    ExpiresByType text/html                             "access plus 0 seconds"
+
+  # JavaScript
+    ExpiresByType application/javascript                "access plus 1 week"
+
+  # Manifest files
+    ExpiresByType application/manifest+json             "access plus 1 week"
+    ExpiresByType application/x-web-app-manifest+json   "access plus 0 seconds"
+    ExpiresByType text/cache-manifest                   "access plus 0 seconds"
+
+  # Media
+    ExpiresByType audio/ogg                             "access plus 1 week"
+    ExpiresByType image/gif                             "access plus 1 week"
+    ExpiresByType image/jpeg                            "access plus 1 week"
+    ExpiresByType image/png                             "access plus 1 week"
+    ExpiresByType video/mp4                             "access plus 1 week"
+    ExpiresByType video/ogg                             "access plus 1 week"
+    ExpiresByType video/webm                            "access plus 1 week"
+
+  # Web feeds
+    ExpiresByType application/atom+xml                  "access plus 1 hour"
+    ExpiresByType application/rss+xml                   "access plus 1 hour"
+
+  # Web fonts
+    ExpiresByType application/font-woff                 "access plus 1 week"
+    ExpiresByType application/vnd.ms-fontobject         "access plus 1 week"
+    ExpiresByType application/x-font-ttf                "access plus 1 week"
+    ExpiresByType font/opentype                         "access plus 1 week"
+    ExpiresByType image/svg+xml                         "access plus 1 week"
+
+</IfModule>
